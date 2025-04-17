@@ -155,7 +155,6 @@
 
     .hidden { display: none; }
 
-    /* Added responsive styles */
     @media (max-width: 768px) {
       body {
         padding: 20px;
@@ -457,7 +456,6 @@
       document.getElementById('formContainer').classList.remove('hidden');
     });
 
-    // Added live validation
     document.getElementById('name').addEventListener('input', function() {
       const isValid = /^[A-Za-z ]+$/.test(this.value.trim());
       document.getElementById('nameError').classList.toggle('hidden', isValid);
