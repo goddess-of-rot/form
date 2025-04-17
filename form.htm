@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive Registration</title>
+  <style>
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body {
+      margin: 20px;
+      padding: 60px;
+      font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f6d365, #fda085, #fbc2eb);
+      background-size: 300% 300%;
+      animation: gradientBG 20s ease infinite;
+      color: #333;
+    }
+
+    .container {
+      width: 95vw;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      color: #444;
+    }
+
+    #regForm { display: block; }
+    .form-section {
+      margin-bottom: 25px;
+      transition: background 0.3s;
+    }
+    .form-section:hover {
+      background: #f0f8ff;
+      border-radius: 6px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      border-color: #5563de;
+      box-shadow: 0 0 4px rgba(85,99,222,0.4);
+      outline: none;
+    }
+    .error {
+      color: #c0392b;
+      font-size: 0.9rem;
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    .radio-group {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 10px;
+    }
+    .radio-group label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-weight: normal;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 5px 8px 5px 0;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #5563de, #3f50b5);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(63,80,181,0.4);
+    }
+    .btn-secondary {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .btn-secondary:hover {
+      background: #c0392b;
+    }
+    .btn-action {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      background: #5563de;
+      color: #fff;
+      border-radius: 4px;
+      margin-right: 5px;
+    }
+    .btn-action:hover {
+      background: #3f50b5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+    th {
+      background: #5563de;
+      color: #fff;
+    }
+    tbody tr {
+      transition: background 0.3s;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    tbody tr:hover {
+      background: rgba(85,99,222,0.1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="formContainer">
+      <h2>Registration Form</h2>
+      <form id="regForm" autocomplete="off">
+        <div class="form-section">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Full name" required />
+          <div id="nameError" class="error hidden">Name can’t contain numbers</div>
+        </div>
+        <div class="form-section">
+          <label for="age">Age</label>
+          <input type="text" id="age" name="age" placeholder="Age" required />
+          <div id="ageError" class="error hidden">Age can’t contain letters</div>
+        </div>
+        <div class="form-section">
+          <label for="mobile">Mobile Number</label>
+          <input type="text" id="mobile" name="mobile" placeholder="Mobile number" required />
+          <div id="mobileError" class="error hidden">Mobile must be a number</div>
+        </div>
+        <div class="form-section">
+          <label>Gender</label>
+          <div class="radio-group">
+            <label><input type="radio" name="gender" value="male" required /> Male</label>
+            <label><input type="radio" name="gender" value="female" /> Female</label>
+          </div>
+        </div>
+        <div class="form-section">
+          <label for="married">Married</label>
+          <select id="married" name="married" required>
+            <option value="">— Select —</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div id="spouseSection" class="hidden">
+          <div class="form-section">
+            <label id="spouseNameLabel" for="spouseName">Spouse Name</label>
+            <input type="text" id="spouseName" name="spouseName" placeholder="Spouse name" />
+            <div id="spouseNameError" class="error hidden">Name can’t contain numbers</div>
+          </div>
+          <div class="form-section">
+            <label id="spouseAgeLabel" for="spouseAge">Spouse Age</label>
+            <input type="text" id="spouseAge" name="spouseAge" placeholder="Spouse age" />
+            <div id="spouseAgeError" class="error hidden">Age can’t contain letters</div>
+          </div>
+        </div>
+        <div class="form-section">
+          <label for="graduation">Graduation</label>
+          <select id="graduation" name="graduation" required>
+            <option value="">— Select —</option>
+            <option value="High School">High School</option>
+            <option value="Bachelor">Bachelor</option>
+            <option value="Master">Master</option>
+            <option value="PhD">PhD</option>
+          </select>
+        </div>
+        <div id="maleExtra" class="hidden">
+          <div class="form-section">
+            <label for="earning">Monthly Earning</label>
+            <select id="earning" name="earning">
+              <option value="">— Range —</option>
+              <option value="0-1000">$0–$1k</option>
+              <option value="1000-3000">$1k–$3k</option>
+              <option value="3000-5000">$3k–$5k</option>
+              <option value="5000+">$5k+</option>
+            </select>
+          </div>
+          <div class="form-section">
+            <label for="resident">Resident</label>
+            <input type="text" id="resident" name="resident" placeholder="City/State" />
+          </div>
+          <div class="form-section">
+            <label for="ownHouse">Own House</label>
+            <select id="ownHouse" name="ownHouse">
+              <option value="">— Select —</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-section">
+          <label for="image">Upload Image</label>
+          <input type="file" id="image" name="image" accept="image/*" required />
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+        <button type="button" class="btn btn-primary" id="viewTablesBtn">View Tables</button>
+      </form>
+    </div>
+
+    <div id="tableContainer" class="hidden">
+      <h2>Registered Users</h2>
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>Name</th><th>Age</th><th>Mobile</th><th>Gender</th><th>Married</th>
+            <th>Spouse Name</th><th>Spouse Age</th><th>Graduation</th>
+            <th>Monthly Earning</th><th>Resident</th><th>Own House</th>
+            <th>Image</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button id="backBtn" class="btn btn-secondary">Go Back to Form</button>
+    </div>
+  </div>
+
+  <script>
+    let currentEditRow = null, firstSubmission = false;
+
+    function updateSpouseSection() {
+      const married = document.getElementById('married').value;
+      const gender  = document.querySelector('input[name="gender"]:checked')?.value;
+      document.getElementById('spouseSection').classList.toggle('hidden', married !== 'yes');
+      document.getElementById('maleExtra').classList.toggle('hidden', !(married==='yes' && gender==='male'));
+      if (married === 'yes') {
+        document.getElementById('spouseNameLabel').innerText = gender === 'male' ? 'Wife Name' : 'Husband Name';
+        document.getElementById('spouseAgeLabel').innerText  = gender === 'male' ? 'Wife Age'  : 'Husband Age';
+      }
+    }
+    document.getElementById('married').addEventListener('change', updateSpouseSection);
+    document.getElementsByName('gender').forEach(r => r.addEventListener('change', updateSpouseSection));
+
+    function showErr(id,msg) { const el = document.getElementById(id); el.innerText = msg; el.classList.remove('hidden'); }
+    function hideErr(id)     { document.getElementById(id).classList.add('hidden'); }
+
+    function validateFields() {
+      let ok = true;
+      const nameRe = /^[A-Za-z ]+$/, numRe = /^[0-9]+$/;
+      const n  = document.getElementById('name').value.trim(),
+            a  = document.getElementById('age').value.trim(),
+            m  = document.getElementById('mobile').value.trim(),
+            rd = document.getElementById('married').value,
+            sn = document.getElementById('spouseName').value.trim(),
+            sa = document.getElementById('spouseAge').value.trim();
+
+      if (!nameRe.test(n)) { showErr('nameError','Name can’t contain numbers'); ok=false; } else hideErr('nameError');
+      if (!numRe.test(a))  { showErr('ageError','Age can’t contain letters'); ok=false; } else hideErr('ageError');
+      if (!numRe.test(m))  { showErr('mobileError','Mobile must be a number'); ok=false; } else hideErr('mobileError');
+      if (rd==='yes') {
+        if (!nameRe.test(sn)) { showErr('spouseNameError','Name can’t contain numbers'); ok=false; } else hideErr('spouseNameError');
+        if (!numRe.test(sa))  { showErr('spouseAgeError','Age can’t contain letters'); ok=false; } else hideErr('spouseAgeError');
+      }
+      return ok;
+    }
+
+    function getFormData() {
+      const f = new FormData(document.getElementById('regForm')),
+            img = f.get('image');
+      return {
+        name: f.get('name'),
+        age: f.get('age'),
+        mobile: f.get('mobile'),
+        gender: f.get('gender'),
+        married: f.get('married'),
+        spouseName: f.get('spouseName') || '',
+        spouseAge: f.get('spouseAge')   || '',
+        graduation: f.get('graduation'),
+        earning: f.get('earning')       || '',
+        resident: f.get('resident')     || '',
+        ownHouse: f.get('ownHouse')     || '',
+        imageURL: img ? URL.createObjectURL(img) : ''
+      };
+    }
+
+    function createRow(d) {
+      const tr = document.createElement('tr'),
+            td = v => `<td>${v||'-'}</td>`,
+            imgTag = `<img src="${d.imageURL}" style="width:50px;height:50px;border-radius:4px;">`,
+            actions = `<button class="btn-action" onclick="editRow(this)">Edit</button>
+                       <button class="btn-action" onclick="deleteRow(this)">Delete</button>`;
+
+      tr.innerHTML =
+        td(d.name) + td(d.age) + td(d.mobile) + td(d.gender) + td(d.married) +
+        td(d.spouseName) + td(d.spouseAge) + td(d.graduation) +
+        td(d.earning) + td(d.resident) + td(d.ownHouse) +
+        `<td>${imgTag}</td><td>${actions}</td>`;
+
+      return tr;
+    }
+
+    document.getElementById('regForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!validateFields()) return;
+
+      const data = getFormData(),
+            tbody = document.getElementById('usersTable').querySelector('tbody'),
+            row   = createRow(data);
+
+      if (currentEditRow) tbody.replaceChild(row, currentEditRow);
+      else tbody.appendChild(row);
+
+      if (!firstSubmission) {
+        firstSubmission = true;
+        document.getElementById('formContainer').classList.add('hidden');
+        document.getElementById('tableContainer').classList.remove('hidden');
+      }
+
+      document.getElementById('regForm').reset();
+      document.getElementById('spouseSection').classList.add('hidden');
+      document.getElementById('maleExtra').classList.add('hidden');
+      currentEditRow = null;
+      document.getElementById('submitBtn').innerText = 'Submit';
+      ['nameError','ageError','mobileError','spouseNameError','spouseAgeError'].forEach(hideErr);
+    });
+
+    document.getElementById('viewTablesBtn').addEventListener('click', () => {
+      document.getElementById('formContainer').classList.add('hidden');
+      document.getElementById('tableContainer').classList.remove('hidden');
+    });
+
+    window.editRow = btn => {
+      const tr = btn.closest('tr'),
+            c  = Array.from(tr.cells).map(td => td.innerText);
+      currentEditRow = tr;
+
+      document.getElementById('name').value     = c[0]==='-'?'':c[0];
+      document.getElementById('age').value      = c[1]==='-'?'':c[1];
+      document.getElementById('mobile').value   = c[2]==='-'?'':c[2];
+      document.querySelector(`input[name="gender"][value="${c[3]}"]`).checked = true;
+      document.getElementById('married').value = c[4];
+      updateSpouseSection();
+
+      document.getElementById('spouseName').value = c[5]==='-'?'':c[5];
+      document.getElementById('spouseAge').value  = c[6]==='-'?'':c[6];
+      document.getElementById('graduation').value = c[7];
+      document.getElementById('earning').value     = c[8]==='-'?'':c[8];
+      document.getElementById('resident').value    = c[9]==='-'?'':c[9];
+      document.getElementById('ownHouse').value    = c[10];
+
+      document.getElementById('submitBtn').innerText='Update Row';
+      document.getElementById('tableContainer').classList.add('hidden');
+      document.getElementById('formContainer').classList.remove('hidden');
+    };
+
+    window.deleteRow = btn => {
+      if (confirm('Delete this row?')) btn.closest('tr').remove();
+    };
+
+    document.getElementById('backBtn').addEventListener('click', () => {
+      document.getElementById('tableContainer').classList.add('hidden');
+      document.getElementById('formContainer').classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
